@@ -30,5 +30,7 @@
         border-color: lightpink;     /* red */
     }
 </style>
-
-<div id="mytimeline"></div>
+<div ng-app="roadmapApp" ng-controller="roadmapCtl">
+    <timeline ng-model="data"></timeline>
+    <div id="mytimeline" />
+</div>  
