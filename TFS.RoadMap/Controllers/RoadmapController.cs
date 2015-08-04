@@ -5,19 +5,37 @@ using System.Web.Http;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using TFS.RoadMap.Models;
+using System.Configuration;
+using TFS.RoadMap.Properties;
 
 namespace TFS.RoadMap.Controllers
 {
     public class RoadmapController : ApiController
     {
-        public IEnumerable<FeatureEntity> Get()
+        public IEnumerable<FeatureEntity> Get(string project, string rootQuery, string query)
         {
-            var tpc = new TfsTeamProjectCollection(new Uri("http://exptfs:8080/tfs/geneva"));
+            if (string.IsNullOrEmpty(project)) throw new NullReferenceException("project");
+            if (string.IsNullOrEmpty(rootQuery)) throw new NullReferenceException("rootQuery");
+            if (string.IsNullOrEmpty(query)) throw new NullReferenceException("query");
+
+            var tfsUrl = Settings.Default.TfsUrl;
+
+            var tpc = new TfsTeamProjectCollection(new Uri(tfsUrl));
             var workItemStore = new WorkItemStore(tpc);
 
-            var queryRoot = workItemStore.Projects["PSG Dashboard"].QueryHierarchy;
-            var folder = (QueryFolder)queryRoot["Shared Queries"];
-            var queryDef = (QueryDefinition)folder["Features for Roadmap"];
+            var queryRoot = workItemStore.Projects[project].QueryHierarchy;
+            var folder = (QueryFolder)queryRoot[rootQuery];
+
+            QueryDefinition queryDef = null;
+            foreach (var q in query.Split('/'))
+	        {
+                queryDef = (QueryDefinition)folder[q];
+	        }
+
+            if (queryDef == null)
+	        {
+		        throw new Exception(string.Format("Query {0} was not found on the root {1}", query, rootQuery));
+	        }
 
             var queryResults = workItemStore.Query(queryDef.QueryText);
 
