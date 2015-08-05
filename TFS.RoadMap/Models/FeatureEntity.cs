@@ -11,5 +11,15 @@ namespace TFS.RoadMap.Models
         public string Group { get; set; }
         public string Risk { get; internal set; }
         public string Tags { get; internal set; }
+
+        public string Priority { get; set; }
+
+        public string Requestor { get; set; }
+
+        public int WIId { get; set; }
+
+        public int ChildUSCount { get; set; }
+
+        public string Status { get; set; }
     }
 }

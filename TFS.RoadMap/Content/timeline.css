@@ -209,3 +209,7 @@ div.timeline-navigation-move-left {
 div.timeline-navigation-move-right {
     background: url('img/16/moveright.png') no-repeat center;
 }
+
+.contentTitle {
+    font-weight: bold;
+}
