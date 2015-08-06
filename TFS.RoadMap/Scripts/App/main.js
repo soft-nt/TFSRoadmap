@@ -6,14 +6,11 @@ roadmapApp.directive('timeline', function ($timeout, $parse) {
             replace: true,
             template: '<div id="timeline{{$id}}"></div>',
             link: function ($scope, $element, $attributes) {
-                var tt = $parse($attributes.onitemselected);
-                tt();
-
                 if ($attributes.ngModel) {
                     // specify options
                     var options = {
-                        width: "100%",
-                        height: "1500px",
+                        width: $attributes.width,
+                        height: $attributes.height,
                         axisOnTop: true,
                         eventMargin: 10,  // minimal margin between events
                         eventMarginAxis: 0, // minimal margin beteen events and the axis
